@@ -14,7 +14,7 @@ public class AutoComplete{
 
   public AutoComplete(String dictFile) throws java.io.IOException {
     //TO-DO Initialize the instance variables  
-    root = null;
+    root = null;   // Initalize the variables
     
     Scanner fileScan = new Scanner(new FileInputStream(dictFile));
     while(fileScan.hasNextLine()){
@@ -31,7 +31,8 @@ public class AutoComplete{
   //add word to the tree
   public void add(StringBuilder word){
     if (word == null) throw new IllegalArgumentException("calls put() with a null key");//TO-DO Implement this method
-    root=add(root,word,0);
+    
+    root=add(root,word,0); //helper method
   }
 
   private DLBNode add(DLBNode x,StringBuilder word,int pos)
@@ -40,16 +41,16 @@ public class AutoComplete{
     if(letter==null)
     {
       
-     letter=new DLBNode(word.charAt(pos),0);
+     letter=new DLBNode(word.charAt(pos),0);      // add the character to the new node
 
       
       if(pos<word.length()-1)
       {
-        letter.child=add(letter.child,word,pos+1);
+        letter.child=add(letter.child,word,pos+1);           // change to child
       }
       else
       {
-        letter.isWord=true;
+        letter.isWord=true;                                // when node is a complete word---change isWord to false as sign  of completer word
       }
       
       
@@ -81,35 +82,32 @@ public class AutoComplete{
   {
     //TO-DO Implement this method
 
-    updatescore(root,word,0);
-
-    
-
+    updatescore(root,word,0);      //helper method
 
   }
 
-  private void updatescore(DLBNode letter,StringBuilder word,int pos)
+  private void updatescore(DLBNode letter,StringBuilder word,int pos) // actuall increment the score of word
   {
-    if(letter==null) return;
+    if(letter==null) return;     
 
-    if(letter.data==word.charAt(pos))
+    if(letter.data==word.charAt(pos))   // if nodelet == character
     {
-      if(pos<word.length()-1)
+      if(pos<word.length()-1)         
       {
-        updatescore(letter.child, word, pos+1);
+        updatescore(letter.child, word, pos+1);   //recursive call on the child 
 
       }
       else
-      {
-        if(letter.isWord)
+      { 
+        if(letter.isWord)                       
         {
-          letter.score+=1;
+          letter.score+=1;  
         }
       }
     }
     else
     {
-      updatescore(letter.sibling,word,pos);
+      updatescore(letter.sibling,word,pos);   // if the node is not equal character, change to sibling
     }
 
 
@@ -120,7 +118,7 @@ public class AutoComplete{
   //get the score of word
   public int getScore(StringBuilder word){
     //TO-DO Implement this method
-    int score=getScore(root,word,0);
+    int score=getScore(root,word,0);  //helper method
 
 
     return score;
@@ -128,7 +126,7 @@ public class AutoComplete{
 
   private int getScore(DLBNode letter,StringBuilder word,int pos)
   {
-    if(letter==null) return -1;
+    if(letter==null) return -1;   //if node is null or no complete word then return -1
 
     int score;
 
@@ -136,7 +134,7 @@ public class AutoComplete{
     {
       if(pos<word.length()-1)
       {
-          score=getScore(letter.child, word, pos+1);
+          score=getScore(letter.child, word, pos+1); // next child
       }
       else
       {
@@ -149,7 +147,7 @@ public class AutoComplete{
     }
     else
     {
-      score=getScore(letter.sibling,word,pos);
+      score=getScore(letter.sibling,word,pos);   //check sibling
     
     }
     return score;
@@ -165,117 +163,91 @@ public class AutoComplete{
   public ArrayList<Suggestion> retrieveWords(StringBuilder word)
   {
     //TO-DO Implement this method
-    ArrayList<Suggestion> record = new ArrayList<>();
+    
+    ArrayList<Suggestion> record = new ArrayList<>();    // potential complete word list 
     
     int length=word.length();
-    getSuggestion(root,word,length,record,0);
+    
+    getSuggestion(root,word,length,record,0);       //helper method for add potential complete words
 
-    Collections.sort(record);
+    Collections.sort(record);                     // sort
    
-    Collections.reverse(record);
+    Collections.reverse(record);                 //descending 
     
     return record;
   }
 
-  private void getSuggestion(DLBNode letter,StringBuilder word,int length,ArrayList<Suggestion> record,int pos)
+  
+  private void getSuggestion(DLBNode letter, StringBuilder word, int length, ArrayList<Suggestion> record, int pos) // use length  check the position of the character
   {
-    if(letter==null) return;
+    if(letter==null) return; // if there is no node just return 
 
    
-      if(pos<length-1)
+      if(pos<length-1)       
       {
        if(letter.data==word.charAt(pos))
        {
-        getSuggestion(letter.child,word,length,record,pos+1);
+        getSuggestion(letter.child,word,length,record,pos+1); 
        }
        else
        {
-         getSuggestion(letter.sibling,word,length,record,pos);
+         getSuggestion(letter.sibling,word,length,record,pos);       // get the position of prefix
        }
        
         
       }
-      else if(pos==length-1)
+      else if(pos==length-1)                          // if the prefix is a valid word
       {
         if(letter.data==word.charAt(pos))
         {
           if(letter.isWord)
           {
           
-            record.add(new Suggestion(word,letter.score));
+            record.add(new Suggestion(word,letter.score));   // add the word to list 
           
-            getSuggestion(letter.child,word,length,record,pos+1);
+          }
 
+
+
+           getSuggestion(letter.child,word,length,record,pos+1);    // check child 
           
-
-           }
-           else
-           {
-            getSuggestion(letter.child,word,length,record,pos+1);
-           }
-
 
         }
         else
         {
-          getSuggestion(letter.sibling,word,length,record,pos);
+          getSuggestion(letter.sibling,word,length,record,pos);    // check sibling
 
         }
 
 
 
       }
-      else
+      else    // get the complete words that have prefix 
       {
-        word.append(letter.data);
+        word.append(letter.data);    // update words
         
-        if(letter.isWord)
+        if(letter.isWord)          
         {
          
-          record.add(new Suggestion(word,letter.score));
-          
-          getSuggestion(letter.child,word,length, record, pos+1);
-         
-          
-          word.deleteCharAt(pos);
-         
-          
-          getSuggestion(letter.sibling,word,length,record,pos);
-          
-          
-         
+          record.add(new Suggestion(word,letter.score));        //add the words
+        
         }
-        else
-        {
-          getSuggestion(letter.child,word,length,record,pos+1);
-          
-          word.deleteCharAt(pos);
+
+
+        getSuggestion(letter.child,word,length, record, pos+1);   // go over the child 
          
-
-          getSuggestion(letter.sibling,word,length,record,pos);
-
+          
+        word.deleteCharAt(pos);        // after recursive call,delete the character 
+         
+          
+        getSuggestion(letter.sibling,word,length,record,pos);  // go over the sibling 
           
 
-
-
-          
-
-          
-
-          
-        }
+        
         
       }
       
-    
-  
-   
-    
-
-
-    
-
-  }
+    }
 
 
   /**
@@ -329,27 +301,28 @@ public class AutoComplete{
   public class Suggestion implements Comparable<Suggestion> /*.....*/ 
   {
     //TO-DO Fill in the fields and methods for this class. Make sure to have them public as they will be accessed from the test program A2Test.java.
-    public StringBuilder word;
+    public StringBuilder word;   
     public int score;
     
-    public Suggestion(StringBuilder word,int score)
+    public Suggestion(StringBuilder word,int score)  
     {
-      this.word = new StringBuilder(word);
+      this.word = new StringBuilder(word); // create new word
       this.score=score;
 
     }
-    public int compareTo(Suggestion w)
+    public int compareTo(Suggestion w)  //
     {
+      
       int score1=this.score;
       int score2=w.score;
 
-      int order=score1-score2;
+      int order=score1-score2;  // put higher score in the first
 
-      if(order==0)
+      if(order==0)          // if scores are eaual, put small word in the first
       {
-        score1=this.word.length();
-        score2=w.word.length();
-        order=score2-score1;
+        
+       
+        order=w.word.toString().compareTo(this.word.toString());
         
       }
 
