@@ -10,3 +10,15 @@ For the second part of the code, the most difficult part is retrieveword method.
   In the retrieWords method, the most difficult part is to think about all the conditions of the position of word and prefix that users may input by using recursive call. The basic logic is to try to get the position of the prefix in the DLB tries. When the position is less than the length of the word, make the recursive call on child and sibling to get the right position. When the position is at the end of the word, check whether it is a complete word. If it is a complete word, then add to array-list, and then go to the next child. 
 For all other conditions, if the position is greater than the length of the word. The word appends the character of the node, and check whether is complete. If it is a complete word, then add the complete to the array-list, then go to the next child. After going to the child, delete the character in the current position, then go to the sibling to check every character in the DLB after the position.
 Finally, when I completed the first version of the program, I tried to use a small dictionary to check the methods of the program. To check whether the methods include all the conditions, I tried to different values and type different words to find the condition. I also use the Print tree method to check whether my DLB tries are ok. In addition, I use JDB to check every step of the code. At first time, I did not consider a condition, which makes the find word method always cannot find the correct word. I print tree and JDB find the potential problem and condition in the method, make condition perfect.
+
+# Asymptotic analysis
+Number of words in dictionary :N
+Number of characters in a word or prefix: W
+The alphabet size:R
+Number of matching word suggestions:K
+
+worst runtime of insertion = theta(WR)
+
+worst runtime of 
+
+
