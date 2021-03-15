@@ -12,10 +12,14 @@ For all other conditions, if the position is greater than the length of the word
 Finally, when I completed the first version of the program, I tried to use a small dictionary to check the methods of the program. To check whether the methods include all the conditions, I tried to different values and type different words to find the condition. I also use the Print tree method to check whether my DLB tries are ok. In addition, I use JDB to check every step of the code. At first time, I did not consider a condition, which makes the find word method always cannot find the correct word. I print tree and JDB find the potential problem and condition in the method, make condition perfect.
 
 # Asymptotic analysis
-Number of words in dictionary :N
-Number of characters in a word or prefix: W
-The alphabet size:R
-Number of matching word suggestions:K
+
+  Number of words in dictionary :N
+  
+  Number of characters in a word or prefix: W
+  
+  The alphabet size:R
+  
+  Number of matching word suggestions:K
 
 worst runtime of insertion = Theta(WR)
 
