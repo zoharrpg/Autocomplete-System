@@ -17,8 +17,12 @@ Number of characters in a word or prefix: W
 The alphabet size:R
 Number of matching word suggestions:K
 
-worst runtime of insertion = theta(WR)
+worst runtime of insertion = Theta(WR)
 
-worst runtime of 
+worst runtime of score incrementing = Theta(WR)
+
+worst runtime of score retrieval = Theta(WR)
+
+worst runtime of suggestions retrieval = Theta(KWR)
 
 
