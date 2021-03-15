@@ -163,6 +163,7 @@ public class AutoComplete{
   public ArrayList<Suggestion> retrieveWords(StringBuilder word)
   {
     //TO-DO Implement this method
+    if(word.length()==0) throw new IllegalArgumentException("Empty prefix! Please type one or more letters");// if user did not type words and  press enter, pop up exception.
     
     ArrayList<Suggestion> record = new ArrayList<>();    // potential complete word list 
     
